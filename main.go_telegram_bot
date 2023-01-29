@@ -1,0 +1,37 @@
+package main
+
+import (
+	"log"
+
+	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
+)
+
+func main() {
+	// my telegram chatbot -> mychat1122_bot
+	bot, err := tgbotapi.NewBotAPI("5734663502:AAFneXGoOQ0IF6srT7DdbIH5pmq3QPZEqQY")
+	if err != nil {
+		log.Panic(err)
+	}
+
+	// send message to user
+	// USER_ID := "@thomashuan88"
+	// msg := tgbotapi.NewMessage(USER_ID, "Hello, World!")
+	// bot.Send(msg)
+
+	bot.Debug = true
+
+	updateConfig := tgbotapi.NewUpdate(0)
+	updateConfig.Timeout = 60
+
+	updates, err := bot.GetUpdatesChan(updateConfig)
+
+	for update := range updates {
+		if update.Message == nil {
+			continue
+		}
+		USER_ID := update.Message.Chat.ID
+		println(USER_ID)
+		msg := tgbotapi.NewMessage(USER_ID, "Hello, World!")
+		bot.Send(msg)
+	}
+}
